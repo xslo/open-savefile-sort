@@ -1,0 +1,80 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.IO;
+
+namespace ConsoleApplication1
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            string input = "";
+            string[] str;
+            int i,big,c;
+            
+
+            //建立檔案(內部測試用)
+           // StreamWriter sw = new StreamWriter("homework1test.txt"); //建立檔案串流；建檔，若檔案已存在則覆蓋原內容
+            //sw.WriteLine("1245 45 49 "); //寫入一整列文字
+           // sw.WriteLine("31 45 -50 50");
+           // sw.Close(); //關閉檔案串流
+
+            //讀取檔案
+            StreamReader sr = new StreamReader("homework1test.txt", Encoding.UTF8); //建立檔案串流，讀檔，Encoding.UTF8代表使用UTF-8編碼；為了處理全形的逗號
+            while (!sr.EndOfStream) //讀取檔案內容直到檔尾，將內容存入input
+            {
+                input = sr.ReadToEnd();
+            }
+            sr.Close(); //關閉檔案串流
+
+            str = input.Split(",\r\n".ToCharArray(), StringSplitOptions.RemoveEmptyEntries);
+            //Split()把一行字串分成多個子字串
+            //"，\r\n".ToCharArray()代表以，和特殊字元\r以及特殊字元\n區隔字串
+            //StringSplitOptions.RemoveEmptyEntries是分割選項，用來移除空的字串
+
+            //將字串轉成數值
+            int[] num = new int[str.Length]; //str.Length為取得陣列str的元素個數
+            i = 0;
+            while (i < str.Length)
+            {
+                num[i] = Convert.ToInt32(str[i]); //字串轉數值
+                i++;
+            }
+            for (int count1 = 0; count1 <= i-1 ; count1++)//做排序 
+            {
+                for (int count2 =1; count2 < i; count2++)
+                {
+                    if (num[count2 - 1] > num[count2])
+                    {
+                        big = num[count2 - 1];
+                        num[count2 - 1] = num[count2];
+                        num[count2] = big;
+                    }
+                }
+            }
+            //印出陣列str以及陣列num的內容
+            StreamWriter sw = new StreamWriter("homework1test.txt");
+            i = 0;
+            while (i < str.Length)
+            {
+                Console.WriteLine("str[{0}] = {1}", i, str[i]);
+                i++;
+            }
+            Console.Write("\n");
+            i = 0;
+            while (i < str.Length)
+            {
+                Console.WriteLine("num[{0}] = {1}", i, num[i]);
+                sw.Write(num[i]);
+                sw.Write(",");
+                i++;
+            }
+            sw.Close(); 
+            Console.Write("Press any key to continue . . . ");
+            Console.ReadKey(true); //暫停畫面
+        }
+    }
+}
